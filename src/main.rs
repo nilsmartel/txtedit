@@ -13,7 +13,7 @@ fn main() {
     };
 
     let (filename, content) = util::read_file();
-    let buffer = Buffer::from_str(&content);
+    let buffer = dbg!(Buffer::from_str(&content));
     let state = State {
         buffer,
         font,
@@ -61,6 +61,7 @@ fn view(state: &State) -> Column<'_, Message> {
     for line in b {
         let mut v: Vec<Element<'_, Message>> = Vec::new();
         for c in line {
+            let c = c.to_ascii_lowercase();
             let Some(sym) = font.letters.get(&c) else {
                 eprintln!("symbol {c} not in fontcache");
                 std::process::exit(1);
