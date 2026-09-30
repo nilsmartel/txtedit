@@ -2,17 +2,18 @@ use std::collections::BTreeMap;
 
 use image::GenericImageView;
 
+#[derive(Debug, Clone)]
 pub struct FontCache {
     // TODO better use an array
-    letters: BTreeMap<char, Symbol>,
+    pub letters: BTreeMap<char, Symbol>,
 }
 
 #[derive(Debug, Clone)]
 pub struct Symbol {
-    symbol: char,
-    width: u32,
-    height: u32,
-    img: iced::widget::image::Handle,
+    pub symbol: char,
+    pub width: u32,
+    pub height: u32,
+    pub img: iced::widget::image::Handle,
 }
 
 const SIGNMAP: [&'static str; 9] = [
@@ -36,6 +37,7 @@ pub fn read_images(bytes: &[u8]) -> FontCache {
     let img = png.as_rgb8().expect("convert rgba8");
 
     let mut letters = BTreeMap::new();
+    // Go over each symbol in out signmap (e.g. corresponding chars to how they appear inside the pngs grid.)
     for (row, coordinate_str) in SIGNMAP.iter().enumerate() {
         let row = row as u32;
         for (col, symbol) in coordinate_str.chars().enumerate() {
@@ -52,6 +54,7 @@ pub fn read_images(bytes: &[u8]) -> FontCache {
     FontCache { letters }
 }
 
+/// Trim the left and right sides of an 9x9 grid image of a letter.
 fn extract_sprite(
     symbol: char,
     img: image::SubImage<&image::ImageBuffer<image::Rgb<u8>, Vec<u8>>>,
