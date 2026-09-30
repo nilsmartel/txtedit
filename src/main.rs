@@ -13,7 +13,7 @@ fn main() {
     };
 
     let (filename, content) = util::read_file();
-    let buffer = dbg!(Buffer::from_str(&content));
+    let buffer = Buffer::from_str(&content);
     let state = State {
         buffer,
         font,

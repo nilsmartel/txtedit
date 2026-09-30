@@ -92,8 +92,7 @@ fn extract_sprite(
 
             let p = img.get_pixel(x, y).0;
             pixels.push(p[0]);
-            // pixels.push(p[1]);
-            pixels.push(128);
+            pixels.push(p[1]);
             pixels.push(p[2]);
             pixels.push(255);
         }
