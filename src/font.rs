@@ -76,6 +76,16 @@ fn extract_sprite(
         .take_while(|&x| x)
         .count() as u32;
 
+
+    println!("{symbol}");
+    for y in 0..9 {
+        for x in 0..9 {
+            let c = if img.get_pixel(x, y).0 == [0,0,0] { '#' } else { '.' };
+            print!("{c}");
+        }
+        println!();
+    }
+
     let width = GRID - left_cutoff - right_cutoff;
 
     let mut pixels: Vec<u8> = Vec::with_capacity(height as usize + width as usize * 4);
