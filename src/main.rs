@@ -12,9 +12,13 @@ fn main() {
         read_images(bytes)
     };
 
-    let (_filename, content) = util::read_file();
+    let (filename, content) = util::read_file();
     let buffer = Buffer::from_str(&content);
-    let state = State { buffer, font };
+    let state = State {
+        buffer,
+        font,
+        filename,
+    };
 
     iced::application(move || state.clone(), update, view);
 }
@@ -42,6 +46,7 @@ impl Buffer {
 struct State {
     buffer: Buffer,
     font: FontCache,
+    filename: Option<String>,
 }
 
 type Message = ();
