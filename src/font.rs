@@ -71,7 +71,10 @@ fn extract_sprite(
         (0..height).all(|y| img.get_pixel(x, y).0 == [255, 255, 255]);
 
     let left_cutoff = (0..GRID).map(is_white_column).take_while(|&x| x).count() as u32;
+    // If the section is all white (not yet drawn)
+    // respond with an "unknown" symbol
     if left_cutoff == 9 {
+        eprintln!("symbol for {symbol} is empty");
         return unknown_symbol(symbol, 5, height);
     }
     let right_cutoff = (0..GRID)
