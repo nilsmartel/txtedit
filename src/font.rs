@@ -1,6 +1,5 @@
 use std::{collections::BTreeMap, io::Write};
 
-use iced::border::left;
 use image::GenericImageView;
 
 #[derive(Debug, Clone)]
