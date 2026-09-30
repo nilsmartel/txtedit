@@ -1,6 +1,7 @@
 mod font;
 mod util;
 
+use iced::Element;
 use iced::widget::{Column, image};
 
 use crate::font::{FontCache, read_images};
@@ -48,12 +49,12 @@ type Message = ();
 fn update(_state: &mut State, _message: Message) {}
 
 fn view(state: &State) -> Column<'_, Message> {
-    let b = state.buffer.text;
-    let font = state.font;
+    let b = &state.buffer.text;
+    let font = &state.font;
 
-    let mut col_elems = Vec::new();
+    let mut col_elems: Vec<Element<'_, Message>> = Vec::new();
     for line in b {
-        let mut v = Vec::new();
+        let mut v: Vec<Element<'_, Message>> = Vec::new();
         for c in line {
             let Some(sym) = font.letters.get(&c) else {
                 eprintln!("symbol {c} not in fontcache");
@@ -61,12 +62,12 @@ fn view(state: &State) -> Column<'_, Message> {
             };
 
             let img = image(sym.img.clone());
-            v.push(img);
+            v.push(img.into());
         }
 
-        let row = iced::widget::row(v.into());
-        col_elems.push(row);
+        let row = iced::widget::row(v);
+        col_elems.push(row.into());
     }
 
-    iced::widget::column(col_elems.into())
+    iced::widget::column(col_elems)
 }
