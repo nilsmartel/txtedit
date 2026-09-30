@@ -12,10 +12,7 @@ fn main() {
     };
 
     let (_filename, content) = util::read_file();
-    let buffer = Buffer {
-        lines: str_to_buffer(content),
-        ..Buffer::default()
-    };
+    let buffer = Buffer::from_str(&content);
     let state = State { buffer };
 
     iced::application(|| state.clone(), update, view);
@@ -23,8 +20,18 @@ fn main() {
 
 #[derive(Debug, Default, Clone)]
 pub struct Buffer {
-    pub lines: Vec<Vec<u16>>,
+    pub lines: Vec<Vec<char>>,
     pub cursor: (usize, usize),
+}
+
+impl Buffer {
+    pub fn from_str(s: &str) -> Self {
+        let lines = s.split("\n").map(|s| s.chars().collect::<Vec<char>>()).collect();
+        Buffer {
+            lines,
+            ..Buffer::default()
+        }
+    }
 }
 
 #[derive(Debug, Default, Clone)]
