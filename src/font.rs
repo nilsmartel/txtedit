@@ -1,5 +1,6 @@
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, io::Write};
 
+use iced::border::left;
 use image::GenericImageView;
 
 #[derive(Debug, Clone)]
@@ -38,14 +39,14 @@ pub fn read_images(bytes: &[u8]) -> FontCache {
 
     let mut letters = BTreeMap::new();
     // Go over each symbol in out signmap (e.g. corresponding chars to how they appear inside the pngs grid.)
-    for (row, coordinate_str) in SIGNMAP.iter().enumerate() {
-        let row = row as u32;
-        for (col, symbol) in coordinate_str.chars().enumerate() {
+    for (y_pos, coordinate_str) in SIGNMAP.iter().enumerate() {
+        let y_pos = y_pos as u32;
+        for (x_pos, symbol) in coordinate_str.chars().enumerate() {
             if symbol == ' ' {
                 continue;
             }
-            let col = col as u32;
-            let sprite = extract_sprite(symbol, img.view(row * GRID, col * GRID, GRID, GRID));
+            let x_pos = x_pos as u32;
+            let sprite = extract_sprite(symbol, img.view(x_pos * GRID, y_pos * GRID, GRID, GRID));
 
             letters.insert(symbol, sprite);
         }
@@ -70,6 +71,9 @@ fn extract_sprite(
         (0..height).all(|y| img.get_pixel(x, y).0 == [255, 255, 255]);
 
     let left_cutoff = (0..GRID).map(is_white_column).take_while(|&x| x).count() as u32;
+    if left_cutoff == 9 {
+        return unknown_symbol(symbol, 5, height);
+    }
     let right_cutoff = (0..GRID)
         .rev()
         .map(is_white_column)
@@ -90,7 +94,6 @@ fn extract_sprite(
 
     let mut pixels: Vec<u8> = Vec::with_capacity(height as usize + width as usize * 4);
     for y in 0..height {
-        let y = y as u32;
         for x in 0..width {
             let x = x + left_cutoff;
 
@@ -110,4 +113,21 @@ fn extract_sprite(
         height,
         img,
     }
+}
+
+
+fn unknown_symbol(symbol: char, width: u32, height: u32) -> Symbol {
+    let black = [0,0,0,255];
+    let white = [255,255,255,255];
+    let mut pixels = Vec::with_capacity((width*height*4) as usize);
+
+    for y in 0..height {
+        for x in 0..width {
+            let v = if ((x+y) & 1) == 1 { white} else {black};
+            pixels.write_all(&v).expect("write pixels");
+        }
+    }
+
+    let img = iced::widget::image::Handle::from_rgba(width, height, pixels);
+    Symbol { symbol, width, height, img }
 }
