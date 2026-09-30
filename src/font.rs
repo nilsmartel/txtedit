@@ -29,8 +29,6 @@ const SIGNMAP: [&'static str; 9] = [
 
 const GRID: u32 = 9;
 pub fn read_images(bytes: &[u8]) -> FontCache {
-    
-
     let png = image::load_from_memory_with_format(bytes, image::ImageFormat::Png)
         .expect("decode png image");
 
@@ -43,6 +41,9 @@ pub fn read_images(bytes: &[u8]) -> FontCache {
     for (row, coordinate_str) in SIGNMAP.iter().enumerate() {
         let row = row as u32;
         for (col, symbol) in coordinate_str.chars().enumerate() {
+            if symbol == ' ' {
+                continue;
+            }
             let col = col as u32;
             let sprite = extract_sprite(symbol, img.view(row * GRID, col * GRID, GRID, GRID));
 
@@ -77,9 +78,9 @@ fn extract_sprite(
     let width = GRID - left_cutoff - right_cutoff;
 
     let mut pixels: Vec<u8> = Vec::with_capacity(height as usize + width as usize * 4);
-    for y in 0..height  {
+    for y in 0..height {
         let y = y as u32;
-        for x in 0..width  {
+        for x in 0..width {
             let x = x + left_cutoff;
 
             let p = img.get_pixel(x, y).0;
