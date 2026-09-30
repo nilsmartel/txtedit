@@ -28,7 +28,7 @@ const signmap: [&'static str; 9] = [
 ];
 
 const GRID: u32 = 9;
-fn read_images(bytes: &[u8]) -> FontCache {
+pub fn read_images(bytes: &[u8]) -> FontCache {
     use image::RgbaImage;
 
     let png = image::load_from_memory_with_format(bytes, image::ImageFormat::Png)

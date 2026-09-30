@@ -3,9 +3,14 @@ mod util;
 
 use iced::widget::{Column, toggler::default};
 
-use crate::util::str_to_buffer;
+use crate::{font::read_images, util::str_to_buffer};
 
 fn main() {
+    let font_cache = {
+        let bytes = include_bytes!("../font-9x9.png");
+        read_images(bytes)
+    };
+
     let (filename, content) = util::read_file();
     let buffer = Buffer {
         lines: str_to_buffer(content),
