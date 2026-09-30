@@ -20,7 +20,7 @@ fn main() {
         filename,
     };
 
-    iced::application(move || state.clone(), update, view);
+    iced::application(move || state.clone(), update, view).run();
 }
 
 #[derive(Debug, Default, Clone)]
