@@ -28,14 +28,12 @@ const SIGNMAP: [&'static str; 9] = [
 ];
 
 const GRID: u32 = 9;
+/// Build a fontcache by extracting the pixels from the png one by one.
 pub fn read_images(bytes: &[u8]) -> FontCache {
     let png = image::load_from_memory_with_format(bytes, image::ImageFormat::Png)
         .expect("decode png image");
 
     let img = png.as_rgb8().expect("convert rgba8");
-
-    let _w = img.width();
-    let _w = img.height();
 
     let mut letters = BTreeMap::new();
     for (row, coordinate_str) in SIGNMAP.iter().enumerate() {
