@@ -1,8 +1,8 @@
 mod font;
 mod util;
 
-use iced::Element;
-use iced::widget::{Column, image};
+use iced::widget::{Column, container, image};
+use iced::{Element, Padding};
 
 use crate::font::{FontCache, read_images};
 
@@ -67,11 +67,12 @@ fn view(state: &State) -> Column<'_, Message> {
                 std::process::exit(1);
             };
 
-            let img = image(sym.img.clone());
+            let img = image(sym.img.clone()).filter_method(image::FilterMethod::Nearest);
+            let img = container(img).padding(Padding::ZERO.left(2));
             v.push(img.into());
         }
 
-        let row = iced::widget::row(v);
+        let row = iced::widget::row(v).padding(Padding::ZERO.top(2));
         col_elems.push(row.into());
     }
 
