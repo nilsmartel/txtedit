@@ -37,6 +37,7 @@ pub fn read_images(bytes: &[u8]) -> FontCache {
     let img = png.as_rgb8().expect("convert rgba8");
 
     let mut letters = BTreeMap::new();
+    letters.insert(' ', white_symbol(' ', 4, GRID));
     // Go over each symbol in out signmap (e.g. corresponding chars to how they appear inside the pngs grid.)
     for (y_pos, coordinate_str) in SIGNMAP.iter().enumerate() {
         let y_pos = y_pos as u32;
@@ -116,6 +117,25 @@ fn unknown_symbol(symbol: char, width: u32, height: u32) -> Symbol {
         for x in 0..width {
             let v = if ((x + y) & 1) == 1 { white } else { black };
             pixels.write_all(&v).expect("write pixels");
+        }
+    }
+
+    let img = iced::widget::image::Handle::from_rgba(width, height, pixels);
+    Symbol {
+        symbol,
+        width,
+        height,
+        img,
+    }
+}
+
+fn white_symbol(symbol: char, width: u32, height: u32) -> Symbol {
+    let white = [255, 255, 255, 255];
+    let mut pixels = Vec::with_capacity((width * height * 4) as usize);
+
+    for y in 0..height {
+        for x in 0..width {
+            pixels.write_all(&white).expect("write pixels");
         }
     }
 
