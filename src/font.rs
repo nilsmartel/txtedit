@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use image::{GenericImage, GenericImageView};
+use image::GenericImageView;
 
 pub struct FontCache {
     // TODO better use an array
@@ -15,7 +15,7 @@ pub struct Symbol {
     img: iced::widget::image::Handle,
 }
 
-const signmap: [&'static str; 9] = [
+const SIGNMAP: [&'static str; 9] = [
     "abcdefghijklmnopqrstuvwxyz",
     "ä             ö   ß ü",
     "0123456789",
@@ -29,18 +29,18 @@ const signmap: [&'static str; 9] = [
 
 const GRID: u32 = 9;
 pub fn read_images(bytes: &[u8]) -> FontCache {
-    use image::RgbaImage;
+    
 
     let png = image::load_from_memory_with_format(bytes, image::ImageFormat::Png)
         .expect("decode png image");
 
     let img = png.as_rgb8().expect("convert rgba8");
 
-    let w = img.width();
-    let w = img.height();
+    let _w = img.width();
+    let _w = img.height();
 
     let mut letters = BTreeMap::new();
-    for (row, coordinate_str) in signmap.iter().enumerate() {
+    for (row, coordinate_str) in SIGNMAP.iter().enumerate() {
         let row = row as u32;
         for (col, symbol) in coordinate_str.chars().enumerate() {
             let col = col as u32;
@@ -77,9 +77,9 @@ fn extract_sprite(
     let width = GRID - left_cutoff - right_cutoff;
 
     let mut pixels: Vec<u8> = Vec::with_capacity(height as usize + width as usize * 4);
-    for y in (0..height) {
+    for y in 0..height  {
         let y = y as u32;
-        for x in (0..width) {
+        for x in 0..width  {
             let x = x + left_cutoff;
 
             let p = img.get_pixel(x, y).0;

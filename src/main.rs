@@ -1,17 +1,17 @@
 mod font;
 mod util;
 
-use iced::widget::{Column, toggler::default};
+use iced::widget::Column;
 
 use crate::{font::read_images, util::str_to_buffer};
 
 fn main() {
-    let font_cache = {
+    let _font_cache = {
         let bytes = include_bytes!("../font-9x9.png");
         read_images(bytes)
     };
 
-    let (filename, content) = util::read_file();
+    let (_filename, content) = util::read_file();
     let buffer = Buffer {
         lines: str_to_buffer(content),
         ..Buffer::default()
@@ -34,8 +34,8 @@ struct State {
 
 type Message = ();
 
-fn update(state: &mut State, message: Message) {}
+fn update(_state: &mut State, _message: Message) {}
 
-fn view(state: &State) -> Column<Message> {
+fn view(_state: &State) -> Column<'_, Message> {
     todo!()
 }
