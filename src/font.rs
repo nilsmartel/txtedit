@@ -108,19 +108,23 @@ fn extract_sprite(
     }
 }
 
-
 fn unknown_symbol(symbol: char, width: u32, height: u32) -> Symbol {
-    let black = [0,0,0,255];
-    let white = [255,255,255,255];
-    let mut pixels = Vec::with_capacity((width*height*4) as usize);
+    let black = [0, 0, 0, 255];
+    let white = [255, 255, 255, 255];
+    let mut pixels = Vec::with_capacity((width * height * 4) as usize);
 
     for y in 0..height {
         for x in 0..width {
-            let v = if ((x+y) & 1) == 1 { white} else {black};
+            let v = if ((x + y) & 1) == 1 { white } else { black };
             pixels.write_all(&v).expect("write pixels");
         }
     }
 
     let img = iced::widget::image::Handle::from_rgba(width, height, pixels);
-    Symbol { symbol, width, height, img }
+    Symbol {
+        symbol,
+        width,
+        height,
+        img,
+    }
 }

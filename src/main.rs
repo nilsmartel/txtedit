@@ -3,7 +3,7 @@ mod util;
 
 use iced::widget::Column;
 
-use crate::{font::read_images};
+use crate::font::read_images;
 
 fn main() {
     let _font_cache = {
@@ -26,7 +26,10 @@ pub struct Buffer {
 
 impl Buffer {
     pub fn from_str(s: &str) -> Self {
-        let lines = s.split("\n").map(|s| s.chars().collect::<Vec<char>>()).collect();
+        let lines = s
+            .split("\n")
+            .map(|s| s.chars().collect::<Vec<char>>())
+            .collect();
         Buffer {
             lines,
             ..Buffer::default()
