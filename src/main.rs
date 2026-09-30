@@ -3,7 +3,7 @@ mod util;
 
 use iced::widget::Column;
 
-use crate::{font::read_images, util::str_to_buffer};
+use crate::{font::read_images};
 
 fn main() {
     let _font_cache = {
