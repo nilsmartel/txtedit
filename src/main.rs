@@ -1,3 +1,4 @@
+mod font;
 mod util;
 
 use iced::widget::{Column, toggler::default};
